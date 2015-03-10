@@ -1,0 +1,92 @@
+run-bitplane:
+	@echo
+	@echo "Running bitplane transformation..."
+	./bitplane text.dat
+	./bitplane audio.dat
+	./bitplane binary.dat
+	./bitplane image.dat
+	
+	@echo "Running QM coder on original files..."
+	./QM text.dat
+	./QM audio.dat
+	./QM binary.dat
+	./QM image.dat
+
+	@echo "Running QM on bitplane files..."
+	./QM text.dat.BP
+	./QM audio.dat.BP
+	./QM binary.dat.BP
+	./QM image.dat.BP
+	
+	@echo "Running CABAC huffman preprocessing..."
+	./Lossless encode hm text.dat
+	./Lossless encode hm audio.dat
+	./Lossless encode hm binary.dat
+	./Lossless encode hm image.dat
+	
+	@echo "Running CABAC on original file"
+	./CABAC text.dat 1
+	./CABAC audio.dat 1
+	./CABAC binary.dat 1
+	./CABAC image.dat 1
+
+	@echo "Running CABAC on original file"
+	./CABAC text.dat 2
+	./CABAC audio.dat 2
+	./CABAC binary.dat 2
+	./CABAC image.dat 2
+
+	@echo "Running CABAC on original file"
+	./CABAC text.dat 3
+	./CABAC audio.dat 3
+	./CABAC binary.dat 3
+	./CABAC image.dat 3
+
+	@echo "Running CABAC on pre processed file"
+	./CABAC text.dat-huffman.out 3
+	./CABAC audio.dat-huffman.out 3
+	./CABAC binary.dat-huffman.out 3
+	./CABAC image.dat-huffman.out 3
+
+	@echo "Running blocking for STDVQ..."
+	./blocking 2 trainingVector.4
+	./blocking 4 trainingVector.16
+	./blocking 8 trainingVector.64
+	
+
+	@echo "Running Lloyd-Max quantization"
+	@echo "Quantization level = 3"
+	./Lloyd 3
+	@echo "Quantization level = 5"
+	./Lloyd 5
+
+	@echo "Get quantized entropy"
+	./entropy chem.quantized.3
+	./entropy moon.quantized.3
+	./entropy house.quantized.3
+	./entropy couple.quantized.3
+	./entropy f16.quantized.3
+	./entropy elaine.quantized.3
+	./entropy chem.quantized.5
+	./entropy moon.quantized.5
+	./entropy house.quantized.5
+	./entropy couple.quantized.5
+	./entropy f16.quantized.5
+	./entropy elaine.quantized.5
+
+	@echo "Runnning DCT and Quantization"
+	./DCTQ lena.raw 50
+	./DCTQ lena.raw 90
+	./DCTQ lena.raw 10
+
+	@echo "Running JPEG deblocking"
+	./deblocking bw clock1.raw
+	./deblocking bw clock2.raw
+	./deblocking bw clock3.raw
+	./deblocking bw clock4.raw
+	./deblocking bw clock5.raw
+	./deblocking color pepper1.raw
+	./deblocking color pepper2.raw
+	./deblocking color pepper3.raw
+	./deblocking color pepper4.raw
+	./deblocking color pepper5.raw

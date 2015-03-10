@@ -1,0 +1,78 @@
+#EE669 Homework Assignment #2
+#Mar 1, 2015
+#Name: Yuan Liu
+#ID: 2521-8491-85
+#Email: liu260@usc.edu
+#compiled on MAC OSX Yosemite and Xocde 6 with g++
+
+#######Execution Instruction##############
+# Please place the "QM_state_transition_table.txt" file to the debug folder. 
+# Please place all input file in to the debug folder
+# JPEG/Matlab/jpeg2raw is used to convert jpeg file to raw file, please run this before JPEG program and place output file into debug folder
+# JPEG/Matlab/median is used to apply 2d median filter to image files, for comparison with deblocking
+# JPEG/Matlab/jpegpsnr is used to calculate the psnr of jpeg files
+# Please run the submitted matlab program first, these programs will generate required input file for the main program to run, like raw input images
+# The batch run script is located in the debug folder, it will run all the executables and print the outputs in the console.
+#  Screenshots provided in the report
+#########################################
+
+compile:
+
+
+	@echo "compiling...."
+	@echo "compiling QMcoder..."
+	g++ -c QMcoder/QMcoder/bitio.cpp
+	g++ -c QMcoder/QMcoder/readTable.cpp
+	g++ -c QMcoder/QMcoder/QMmain.cpp
+	g++ -o debug/QM QMmain.o readTable.o bitio.o
+
+	@echo "compiling CABAC..."
+	g++ -c QMcoder/CABAC/bitio.cpp
+	g++ -c QMcoder/CABAC/QMCODER.cpp
+	g++ -c QMcoder/CABAC/CABACmain.cpp
+	g++ -o debug/CABAC CABACmain.o QMCODER.o bitio.o
+
+	@echo "compiling bitplane"
+	g++ -c QMcoder/BitPlane/bitio.cpp
+	g++ -c QMcoder/BitPlane/bitplane.cpp
+	g++ -o debug/bitplane bitplane.o bitio.o
+
+	@echo "compiling pre processing"
+	g++ -c Lossless/bitio.cpp
+	g++ -c Lossless/statistics.cpp
+	g++ -c Lossless/Huffman.cpp 
+	g++ -c Lossless/shannon.cpp
+	g++ -c Lossless/adaptiveHuff.cpp
+	g++ -c Lossless/MTF.cpp
+	g++ -c Lossless/runLength.cpp
+	g++ -c Lossless/main.cpp
+	g++ -o debug/lossless main.o Huffman.o shannon.o adaptiveHuff.o runLength.o MTF.o statistics.o bitio.o
+
+	@echo "compiling Lloyd-Max..."
+	g++ -c Quantizer/LloydMax/Lloyd.cpp
+	g++ -c Quantizer/LloydMax/Lloydmain.cpp
+	g++ -o debug/Lloyd Lloydmain.o Lloyd.o
+
+	@echo "compiling entropy..."
+	g++ -o debug/entropy Quantizer/Entropy/entropymain.cpp
+
+	@echo "compiling VQ blocking..."
+	g++ -o debug/blocking Quantizer/Blocking/blockingmain.cpp
+	
+	@echo "compiling JPEG DCT and Quantization..."
+	g++ -c JPEG/DCTQ/DCT.cpp
+	g++ -c JPEG/DCTQ/DCTQuantizemain.cpp
+	g++ -o debug/DCTQ DCT.o DCTQuantizemain.o
+
+	@echo "compiling JPEG deblocking..."
+	g++ -c JPEG/Deblock/bitio.cpp
+	g++ -c JPEG/Deblock/deblocking.cpp
+	g++ -c JPEG/Deblock/Jpeg_deblock.cpp
+	g++ -o debug/deblocking bitio.o deblocking.o Jpeg_deblock.o
+
+
+	@echo "cleaning intermediate files..."
+	rm *.o
+
+	@echo "Finished"
+	@echo "Enter /debug to run the batch run script"
