@@ -1,21 +1,3 @@
-#EE669 Homework Assignment #2
-#Mar 1, 2015
-#Name: 
-#ID: 
-#Email: 
-#compiled on MAC OSX Yosemite and Xocde 6 with g++
-
-#######Execution Instruction##############
-# Please place the "QM_state_transition_table.txt" file to the debug folder. 
-# Please place all input file in to the debug folder
-# JPEG/Matlab/jpeg2raw is used to convert jpeg file to raw file, please run this before JPEG program and place output file into debug folder
-# JPEG/Matlab/median is used to apply 2d median filter to image files, for comparison with deblocking
-# JPEG/Matlab/jpegpsnr is used to calculate the psnr of jpeg files
-# Please run the submitted matlab program first, these programs will generate required input file for the main program to run, like raw input images
-# The batch run script is located in the debug folder, it will run all the executables and print the outputs in the console.
-#  Screenshots provided in the report
-#########################################
-
 compile:
 
 
